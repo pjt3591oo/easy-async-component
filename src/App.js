@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import Dropzone from "react-dropzone";
+import FileImg from './fileImg';
+
 import './App.css';
 
 function App() {
+  const [files, setFiles] = useState([]);
+
+  const onDropHandler = (acceptedFiles) => {
+    setFiles(acceptedFiles);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Dropzone
+        onDrop={onDropHandler}
+        accept="image/*"
+        minSize={1024}
+        maxSize={3072000}
+      >
+        {({ getRootProps, getInputProps }) => (
+          <div {...getRootProps({ className: "dropzone" })}>
+            <input {...getInputProps()} />
+            <p>이미지 드랍</p>
+          </div>
+        )}
+      </Dropzone>
+
+      {files.map((file, idx) => (
+        <span key={idx}>
+          <FileImg file={file} />
+        </span>
+      ))}
     </div>
   );
 }
